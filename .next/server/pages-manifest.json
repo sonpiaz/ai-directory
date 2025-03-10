@@ -1,13 +1,5 @@
 {
   "/_app": "pages/_app.js",
   "/_error": "pages/_error.js",
-  "/_document": "pages/_document.js",
-  "/": "pages/index.js",
-  "/tools/[slug]": "pages/tools/[slug].js",
-  "/api/auth/[...nextauth]": "pages/api/auth/[...nextauth].js",
-  "/api/trpc/[trpc]": "pages/api/trpc/[trpc].js",
-  "/categories": "pages/categories.js",
-  "/use-cases": "pages/use-cases.js",
-  "/about": "pages/about.js",
-  "/tools": "pages/tools.js"
+  "/_document": "pages/_document.js"
 }
