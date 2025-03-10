@@ -57,6 +57,38 @@ yarn dev
 
 5. Mở trình duyệt và truy cập: `http://localhost:3000`
 
+## Triển khai trên Vercel
+
+### Bước triển khai
+
+1. Đẩy code lên GitHub repository:
+
+```bash
+git add .
+git commit -m "Chuẩn bị triển khai trên Vercel"
+git push origin main
+```
+
+2. Tạo tài khoản Vercel tại [vercel.com](https://vercel.com) nếu bạn chưa có.
+
+3. Trong dashboard Vercel, nhấp vào "Import Project" và chọn "Import Git Repository".
+
+4. Nhập URL của GitHub repository hoặc chọn repository trong danh sách nếu bạn đã kết nối GitHub với Vercel.
+
+5. Cấu hình dự án:
+   - **Framework Preset**: Next.js
+   - **Build Command**: npm run build
+   - **Output Directory**: .next
+
+6. Thiết lập biến môi trường:
+   - `DATABASE_URL`: URL của cơ sở dữ liệu (nếu sử dụng cơ sở dữ liệu từ xa)
+   - `NEXTAUTH_URL`: URL của trang web sau khi triển khai (ví dụ: https://ai-directory.vercel.app)
+   - `NEXTAUTH_SECRET`: Một chuỗi bí mật cho NextAuth
+
+7. Nhấp vào "Deploy" và đợi quá trình triển khai hoàn tất.
+
+8. Sau khi triển khai xong, bạn có thể truy cập trang web tại URL do Vercel cung cấp.
+
 ## Cấu trúc dự án
 
 - `/pages`: Các trang và API routes
