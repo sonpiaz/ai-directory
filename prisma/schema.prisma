@@ -1,0 +1,117 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite" // SQLite để dễ chạy trên localhost
+  url      = "file:./dev.db"
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  role          String    @default("USER") // Thay enum bằng String
+  accounts      Account[]
+  sessions      Session[]
+  reviews       Review[]
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+model Account {
+  // Schema cho NextAuth
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  // Schema cho NextAuth
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model AiTool {
+  id            String    @id @default(cuid())
+  name          String
+  slug          String    @unique
+  description   String
+  longDesc      String?
+  website       String?
+  logo          String?
+  pricingModel  String // FREE, FREEMIUM, PAID, SUBSCRIPTION, CONTACT_FOR_PRICING
+  hasFreeVersion Boolean  @default(false)
+  startingPrice Float?
+  featured      Boolean   @default(false)
+  verified      Boolean   @default(false)
+  categories    Category[] @relation("AiToolCategory")
+  useCases      UseCase[] @relation("AiToolUseCase")
+  reviews       Review[]
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  viewCount     Int       @default(0)
+  platforms     String // JSON string of platforms
+  integrations  String? // JSON string of integrations
+  launchDate    DateTime?
+}
+
+model Category {
+  id          String    @id @default(cuid())
+  name        String    @unique
+  slug        String    @unique
+  description String?
+  aiTools     AiTool[]  @relation("AiToolCategory")
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model UseCase {
+  id          String    @id @default(cuid())
+  name        String    @unique
+  slug        String    @unique
+  description String?
+  aiTools     AiTool[]  @relation("AiToolUseCase")
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Review {
+  id        String   @id @default(cuid())
+  rating    Int      // 1-5
+  comment   String?
+  aiToolId  String
+  aiTool    AiTool   @relation(fields: [aiToolId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+} 
